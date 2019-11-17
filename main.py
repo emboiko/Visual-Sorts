@@ -154,10 +154,10 @@ def selection_sort(nums, sort_order):
 
         for j in range(i+1, len(nums)):
             if sort_order == "Ascending":
-                if nums[j] < nums[lowest_index]:
+                if nums[j] > nums[lowest_index]:
                     lowest_index = j
             else:
-                if nums[j] > nums[lowest_index]:
+                if nums[j] < nums[lowest_index]:
                     lowest_index = j
         
         nums[i], nums[lowest_index] = nums[lowest_index], nums[i]
