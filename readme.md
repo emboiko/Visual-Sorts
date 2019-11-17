@@ -13,7 +13,7 @@
     -More features coming in the future to further imitate the <a href="https://www.youtube.com/watch?v=kPRA0W1kECg">video</a>.
 </span>
 
-<br>
+<hr><br>
 Usage:
 
 `python main.py`
