@@ -8,6 +8,7 @@ from tkinter import (
     Button,
     StringVar
 )
+
 from random import randint
 from time import sleep
 
@@ -100,7 +101,7 @@ class SorterGUI:
 
         self.canvas.delete("all")
         for i, height in enumerate(self.heights):
-            self.canvas.create_rectangle(i*10,500,(i*10)+10,height, fill="red")
+            self.canvas.create_rectangle(i*10,500,(i*10)+10,height, fill="white")
         self.canvas.update()
 
 
