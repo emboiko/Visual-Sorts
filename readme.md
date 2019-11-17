@@ -17,3 +17,7 @@
 Usage:
 
 `python main.py`
+
+or 
+
+`dist/Visual-Sorts.exe` 
