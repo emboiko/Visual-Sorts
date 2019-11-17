@@ -1,4 +1,4 @@
-<h2>Sorting Algorithms w/ tkinter canvas<h2>
+<h2>Sorting Algorithms w/ tkinter canvas</h2>
 
 <div align="center">
     <img src="https://i.imgur.com/JUnnXam.png">
