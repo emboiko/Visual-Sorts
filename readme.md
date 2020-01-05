@@ -32,6 +32,7 @@
 - [ ] Implement many, many sorting algorithms.
 - [ ] Colors
 - [ ] Audio Artifacts
+- [ ] .exe
 
 ---
 ###### 1/5/2020:
