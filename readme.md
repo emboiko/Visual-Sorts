@@ -1,23 +1,41 @@
-<h2>Sorting Algorithms w/ tkinter canvas</h2>
+# Sorting w/ Python & Tk.Canvas
 
-<div align="center">
-    <img src="https://i.imgur.com/JUnnXam.png">
-    <img src="https://i.imgur.com/YHPmbYT.png">
-</div>
+![](https://i.imgur.com/JUnnXam.png)
 
-<span style="font-size:12;">
-    -Inspired by: <a href="https://www.youtube.com/watch?v=kPRA0W1kECg">15 Sorting Algorithms in 6 Minutes</a>
-    <br>
-    -No dependencies
-    <br>
-    -More features coming in the future to further imitate the <a href="https://www.youtube.com/watch?v=kPRA0W1kECg">video</a>.
-</span>
+![](https://i.imgur.com/YHPmbYT.png)
 
-<hr><br>
-Usage:
+- Inspired by: [15 Sorting Algorithms in 6 Minutes](https://www.youtube.com/watch?v=kPRA0W1kECg).
+- More features coming in the future to further imitate the [video](https://www.youtube.com/watch?v=kPRA0W1kECg).
+
+##### Installation:
+
+- *(Probably create a virtual environment)*
+- Find the wheel appropriate wheel for pyaudio [here](http://people.csail.mit.edu/hubert/pyaudio/).
+- `pip install wheel.whl`
+
+##### Dependencies:
+
+- `pyaudio`
+- `synthesizer`
+
+##### Usage:
 
 `python main.py`
 
-or 
+~~or~~
 
-`dist/Visual-Sorts.exe` 
+~~`Visual-Sorts.exe`~~
+
+---
+
+##### Todo:
+- [ ] Implement many, many sorting algorithms.
+- [ ] Colors
+- [ ] Audio Artifacts
+
+---
+###### 1/5/2020:
+
+- Implemented beeps & boops
+
+- .exe removed temporarily while I try to make PyInstaller play nice with enum34, a package that pyaudio uses
