@@ -109,11 +109,14 @@ class SorterGUI:
     def close(self):
         """
             Callback for main window delete- prevents tkinter from crashing
-            when the app is closed mid-sort.
+            when the app is closed mid-sort. 
+            
+            This might not be necessary if the user isn't running the app in 
+            the console, but there's still an ugly traceback going to stdout.
         """
 
         self.reset()
-        self.master.destroy()
+        raise SystemExit
 
 
     def reset(self):
