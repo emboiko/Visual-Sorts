@@ -10,7 +10,7 @@
 ##### Installation:
 
 - *(Probably create a virtual environment)*
-- Find the wheel appropriate wheel for pyaudio [here](http://people.csail.mit.edu/hubert/pyaudio/).
+- Find the wheel appropriate wheel for pyaudio [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio).
 - `pip install wheel.whl`
 
 ##### Dependencies:
