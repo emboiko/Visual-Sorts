@@ -33,11 +33,11 @@ class SorterGUI:
 
         # Widgets:
         self.sort_mode = StringVar(self.master)
-        self.sort_mode.set(self.sort_modes[0])
+        self.sort_mode.set(self.sort_modes[2])
         self.sort_order = StringVar(self.master)
         self.sort_order.set(self.sort_orders[0])
         self.muted = BooleanVar(self.master)
-        self.muted.set(0)
+        self.muted.set(1)
 
         self.frame = Frame(self.master, relief="sunken", borderwidth=2)
         
@@ -51,7 +51,17 @@ class SorterGUI:
             to=0.1,
             resolution=.005
         )
-        self.delay_scale.set(0.025)
+        self.delay_scale.set(0.085)
+
+        self.freq_offset_label = Label(self.frame, text="Frequency Offset (hz):")
+        self.freq_offset_scale = Scale(
+            self.frame,
+            orient="horizontal",
+            from_=0,
+            to=1000,
+            resolution=10
+        )
+        self.freq_offset_scale.set(250)
         
         self.mode_menu = OptionMenu(self.frame, self.sort_mode, *self.sort_modes)
         self.order_menu = OptionMenu(self.frame, self.sort_order, *self.sort_orders)
@@ -65,12 +75,14 @@ class SorterGUI:
 
         self.frame.grid(row=0, column=0)
         self.mute_check.grid(row=0, column=0)
-        self.delay_label.grid(row=0, column=1)
-        self.delay_scale.grid(row=0, column=2)
-        self.order_menu.grid(row=0, column=3, pady=5, padx=5)
-        self.mode_menu.grid(row=0, column=4, pady=5, padx=5)
-        self.sort_button.grid(row=0, column=5, pady=5, padx=5)
-        self.reset_button.grid(row=0, column=6, pady=5, padx=5)
+        self.freq_offset_label.grid(row=0, column=1)
+        self.freq_offset_scale.grid(row=0, column=2)
+        self.delay_label.grid(row=0, column=3)
+        self.delay_scale.grid(row=0, column=4)
+        self.order_menu.grid(row=0, column=5, pady=5, padx=5)
+        self.mode_menu.grid(row=0, column=6, pady=5, padx=5)
+        self.sort_button.grid(row=0, column=7, pady=5, padx=5)
+        self.reset_button.grid(row=0, column=8, pady=5, padx=5)
         self.canvas.grid(row=1, column=0, sticky="nsew")
 
         # Waveform:
@@ -147,32 +159,33 @@ class SorterGUI:
         for i, height in enumerate(self.heights):
             self.canvas.create_rectangle(i*10,500,(i*10)+10,height, fill="white")
 
-        # It would be nice to reduce the attack / artifacting,
-        # for now, it sounds the way it sounds.
-        # If we're muted, synthesizer still does a much better job
-        # than sleep() for achieving the delay, so freq=0.
-        if self.muted.get():
-            self.player.play_wave(
-                self.synthesizer.generate_constant_wave(
-                    0,
-                    self.delay_scale.get()
+        if self.running:
+            # If we're muted, synthesizer still does a much better job than
+            # sleep() for achieving the delay, so freq=0.
+            if self.muted.get():
+                self.player.play_wave(
+                    self.synthesizer.generate_constant_wave(
+                        0,
+                        self.delay_scale.get()
+                    )
                 )
-            )
-        # Otherwise, we'll cut the duration in half and play both tones 
-        # so we hear the comparisons taking place.
-        else:
-            self.player.play_wave(
-                self.synthesizer.generate_constant_wave(
-                    tone_1 * 4,
-                    self.delay_scale.get() / 2
+            else:
+                # Otherwise, we'll cut the duration in half and play both tones 
+                # so we hear the comparisons taking place. Heights are in range
+                # 0-500 inclusive, which is at max a somewhat low frequency,
+                # so we include an offset which the user can modulate.
+                self.player.play_wave(
+                    self.synthesizer.generate_constant_wave(
+                        tone_1 + self.freq_offset_scale.get(),
+                        self.delay_scale.get() / 2
+                    )
                 )
-            )
-            self.player.play_wave(
-                self.synthesizer.generate_constant_wave(
-                    tone_2 * 4,
-                    self.delay_scale.get() / 2
+                self.player.play_wave(
+                    self.synthesizer.generate_constant_wave(
+                        tone_2 + self.freq_offset_scale.get(),
+                        self.delay_scale.get() / 2
+                    )
                 )
-            )
 
         self.canvas.update()
 
@@ -221,8 +234,8 @@ class SorterGUI:
             for i in range(len(nums) - 1):
                 if sort_order == "Ascending":
                     if nums[i] < nums[i +1]:
-                        nums[i], nums[i+1] = nums[i+1], nums[i]
                         tone_1, tone_2 = nums[i], nums[i+1]
+                        nums[i], nums[i+1] = nums[i+1], nums[i]
                         swapped = True
                 else:
                     if nums[i] > nums[i +1]:
