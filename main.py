@@ -195,22 +195,23 @@ class SorterGUI:
             Controller for sort generators
         """
 
-        # Not everybody loves eval, but this seemed like a nifty use case.
-        # User input is limited to preset data.
-        code = (f"self.{self.sort_mode.get().lower()}_sort(self.heights, self.sort_order.get())")
-        gen = eval(code)
+        if not self.running:
+            # Not everybody loves eval, but this seemed like a nifty use case.
+            # User input is limited to preset data.
+            code = (f"self.{self.sort_mode.get().lower()}_sort(self.heights, self.sort_order.get())")
+            gen = eval(code)
 
-        self.running = True
-        while self.running:
-            try:
-                tone_1, tone_2 = next(gen)
-                self.draw_canvas(tone_1, tone_2)
-            except StopIteration:
-                return
-        
-        # If we make it out of the loop and end up here, the user
-        # reset during the sort, so we re-randomize and draw once.
-        self.reset()
+            self.running = True
+            while self.running:
+                try:
+                    tone_1, tone_2 = next(gen)
+                    self.draw_canvas(tone_1, tone_2)
+                except StopIteration:
+                    return
+            
+            # If we make it out of the loop and end up here, the user
+            # reset during the sort, so we re-randomize and draw once.
+            self.reset()
 
 
     #####################################################################
