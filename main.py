@@ -6,7 +6,9 @@ from tkinter import (
     Scale,
     OptionMenu,
     Button,
-    StringVar
+    Checkbutton,
+    StringVar,
+    BooleanVar
 )
 from random import randint
 from synthesizer import Player, Synthesizer, Waveform
@@ -34,17 +36,23 @@ class SorterGUI:
         self.sort_mode.set(self.sort_modes[0])
         self.sort_order = StringVar(self.master)
         self.sort_order.set(self.sort_orders[0])
+        self.muted = BooleanVar(self.master)
+        self.muted.set(0)
 
         self.frame = Frame(self.master, relief="sunken", borderwidth=2)
+        
+        self.mute_check = Checkbutton(self.frame, variable=self.muted, text="Mute")
+
         self.delay_label = Label(self.frame, text="Delay (ms):")
         self.delay_scale = Scale(
             self.frame,
             orient="horizontal",
-            from_=.001,
-            to=0.05,
-            resolution=.001
+            from_=.005,
+            to=0.1,
+            resolution=.005
         )
         self.delay_scale.set(0.025)
+        
         self.mode_menu = OptionMenu(self.frame, self.sort_mode, *self.sort_modes)
         self.order_menu = OptionMenu(self.frame, self.sort_order, *self.sort_orders)
         self.sort_button = Button(self.frame, text="Sort", command=self.sort)
@@ -56,12 +64,13 @@ class SorterGUI:
         self.master.columnconfigure(0, weight=1)
 
         self.frame.grid(row=0, column=0)
-        self.delay_label.grid(row=0, column=0)
-        self.delay_scale.grid(row=0, column=1)
-        self.order_menu.grid(row=0, column=2, pady=5, padx=5)
-        self.mode_menu.grid(row=0, column=3, pady=5, padx=5)
-        self.sort_button.grid(row=0, column=4, pady=5, padx=5)
-        self.reset_button.grid(row=0, column=5, pady=5, padx=5)
+        self.mute_check.grid(row=0, column=0)
+        self.delay_label.grid(row=0, column=1)
+        self.delay_scale.grid(row=0, column=2)
+        self.order_menu.grid(row=0, column=3, pady=5, padx=5)
+        self.mode_menu.grid(row=0, column=4, pady=5, padx=5)
+        self.sort_button.grid(row=0, column=5, pady=5, padx=5)
+        self.reset_button.grid(row=0, column=6, pady=5, padx=5)
         self.canvas.grid(row=1, column=0, sticky="nsew")
 
         # Waveform:
@@ -129,7 +138,7 @@ class SorterGUI:
         self.draw_canvas()
 
 
-    def draw_canvas(self):
+    def draw_canvas(self, tone_1=0, tone_2=0):
         """
             Clears, then populates the canvas with rectangles using [self.heights]
         """
@@ -137,16 +146,35 @@ class SorterGUI:
         self.canvas.delete("all")
         for i, height in enumerate(self.heights):
             self.canvas.create_rectangle(i*10,500,(i*10)+10,height, fill="white")
-            if self.running:
-                # It would be nice to reduce the attack / artifacting,
-                # for now, it sounds the way it sounds.
-                self.player.play_wave(
-                    self.synthesizer.generate_constant_wave(
-                        height * 3,
-                        self.delay_scale.get()
-                    )
+
+        # It would be nice to reduce the attack / artifacting,
+        # for now, it sounds the way it sounds.
+        # If we're muted, synthesizer still does a much better job
+        # than sleep() for achieving the delay, so freq=0.
+        if self.muted.get():
+            self.player.play_wave(
+                self.synthesizer.generate_constant_wave(
+                    0,
+                    self.delay_scale.get()
                 )
-                self.canvas.update()
+            )
+        # Otherwise, we'll cut the duration in half and play both tones 
+        # so we hear the comparisons taking place.
+        else:
+            self.player.play_wave(
+                self.synthesizer.generate_constant_wave(
+                    tone_1 * 4,
+                    self.delay_scale.get() / 2
+                )
+            )
+            self.player.play_wave(
+                self.synthesizer.generate_constant_wave(
+                    tone_2 * 4,
+                    self.delay_scale.get() / 2
+                )
+            )
+
+        self.canvas.update()
 
 
     def sort(self):
@@ -162,8 +190,8 @@ class SorterGUI:
         self.running = True
         while self.running:
             try:
-                next(gen)
-                self.draw_canvas()
+                tone_1, tone_2 = next(gen)
+                self.draw_canvas(tone_1, tone_2)
             except StopIteration:
                 return
         
@@ -177,14 +205,16 @@ class SorterGUI:
     # the string comparison for sort_order into an ascending_X_sort()
     # and descending_X_sort(), calling accordingly. In this case, I chose
     # to avoid the duplicate code. This is only an excercise after all.
+    # (Not to mention we're making even more assignments to yield tone values)
     #####################################################################
 
 
     def bubble_sort(self, nums, sort_order):
         """
-            Generator for bubble sort w/ conditional for sort order
+            Generator for inplace bubble sort w/ conditional for sort order
         """
 
+        tone_1, tone_2 = 0, 0
         swapped = True
         while swapped:
             swapped = False
@@ -192,19 +222,23 @@ class SorterGUI:
                 if sort_order == "Ascending":
                     if nums[i] < nums[i +1]:
                         nums[i], nums[i+1] = nums[i+1], nums[i]
+                        tone_1, tone_2 = nums[i], nums[i+1]
                         swapped = True
                 else:
                     if nums[i] > nums[i +1]:
+                        tone_1, tone_2 = nums[i], nums[i+1]
                         nums[i], nums[i+1] = nums[i+1], nums[i]
                         swapped = True
 
-            yield
+            yield tone_1, tone_2
 
 
     def selection_sort(self, nums, sort_order):
         """
-            Generator for selection sort w/ conditional for sort order
+            Generator for inplace selection sort w/ conditional for sort order
         """
+
+        tone_1, tone_2 = 0, 0
 
         for i in range(len(nums)):
             lowest_index = i
@@ -217,15 +251,18 @@ class SorterGUI:
                     if nums[j] < nums[lowest_index]:
                         lowest_index = j
             
+            tone_1, tone_2 = nums[i], nums[lowest_index]
             nums[i], nums[lowest_index] = nums[lowest_index], nums[i]
 
-            yield
+            yield tone_1, tone_2
 
 
     def insertion_sort(self, nums, sort_order):
         """
-            Generator for insertion sort w/ conditional for sort order
+            Generator for inplace insertion sort w/ conditional for sort order
         """
+
+        tone_1, tone_2 = 0, 0
 
         for i in range(1, len(nums)):
             inserted = nums[i]
@@ -236,15 +273,17 @@ class SorterGUI:
                     nums[j+1] = nums[j]
                     j -= 1
 
+                tone_1, tone_2 = nums[j], nums[j+1]
                 nums[j+1] = inserted
             else:
                 while j >= 0 and nums[j] > inserted:
                     nums[j+1] = nums[j]
                     j -= 1
 
+                tone_1, tone_2 = nums[j], nums[j+1]
                 nums[j+1] = inserted
 
-            yield
+            yield tone_1, tone_2
 
 
 def main():
