@@ -41,7 +41,16 @@ class SorterGUI:
 
         self.frame = Frame(self.master, relief="sunken", borderwidth=2)
         
-        self.mute_check = Checkbutton(self.frame, variable=self.muted, text="Mute")
+        self.freq_offset_label = Label(self.frame, text="Frequency Offset (hz):")
+        self.freq_offset_scale = Scale(
+            self.frame,
+            orient="horizontal",
+            from_=0,
+            to=1000,
+            resolution=10,
+            length=200
+        )
+        self.freq_offset_scale.set(250)
 
         self.delay_label = Label(self.frame, text="Delay (ms):")
         self.delay_scale = Scale(
@@ -49,32 +58,24 @@ class SorterGUI:
             orient="horizontal",
             from_=.005,
             to=0.1,
-            resolution=.005
+            resolution=.005,
+            length=200
+
         )
         self.delay_scale.set(0.085)
-
-        self.freq_offset_label = Label(self.frame, text="Frequency Offset (hz):")
-        self.freq_offset_scale = Scale(
-            self.frame,
-            orient="horizontal",
-            from_=0,
-            to=1000,
-            resolution=10
-        )
-        self.freq_offset_scale.set(250)
         
         self.mode_menu = OptionMenu(self.frame, self.sort_mode, *self.sort_modes)
         self.order_menu = OptionMenu(self.frame, self.sort_order, *self.sort_orders)
         self.sort_button = Button(self.frame, text="Sort", command=self.sort)
         self.reset_button = Button(self.frame, text="Reset", command=self.reset)
+        self.mute_check = Checkbutton(self.frame, variable=self.muted, text="Mute")
         self.canvas = Canvas(self.master, background="black")
 
         # Layout:
         self.master.rowconfigure(1, weight=1)
         self.master.columnconfigure(0, weight=1)
 
-        self.frame.grid(row=0, column=0)
-        self.mute_check.grid(row=0, column=0)
+        self.frame.grid(row=0, column=0, sticky="ew")
         self.freq_offset_label.grid(row=0, column=1)
         self.freq_offset_scale.grid(row=0, column=2)
         self.delay_label.grid(row=0, column=3)
@@ -83,6 +84,7 @@ class SorterGUI:
         self.mode_menu.grid(row=0, column=6, pady=5, padx=5)
         self.sort_button.grid(row=0, column=7, pady=5, padx=5)
         self.reset_button.grid(row=0, column=8, pady=5, padx=5)
+        self.mute_check.grid(row=0, column=9, padx=10)
         self.canvas.grid(row=1, column=0, sticky="nsew")
 
         # Waveform:

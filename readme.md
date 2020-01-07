@@ -1,8 +1,8 @@
 # Sorting w/ Python & Tk.Canvas
 
-![](https://i.imgur.com/JUnnXam.png)
+![](https://i.imgur.com/zEkXahS.png)
 
-![](https://i.imgur.com/YHPmbYT.png)
+![](https://i.imgur.com/7b3oPQd.png)
 
 - Inspired by: [15 Sorting Algorithms in 6 Minutes](https://www.youtube.com/watch?v=kPRA0W1kECg).
 - More features coming in the future to further imitate the [video](https://www.youtube.com/watch?v=kPRA0W1kECg).
