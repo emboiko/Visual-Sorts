@@ -28,6 +28,7 @@ class SorterGUI:
             "Bubble",
             "Selection",
             "Insertion",
+            "Shell",
         )
         self.sort_orders = ("Ascending","Descending")
 
@@ -52,7 +53,7 @@ class SorterGUI:
         )
         self.freq_offset_scale.set(250)
 
-        self.delay_label = Label(self.frame, text="Delay (ms):")
+        self.delay_label = Label(self.frame, text="Delay (sec):")
         self.delay_scale = Scale(
             self.frame,
             orient="horizontal",
@@ -148,7 +149,7 @@ class SorterGUI:
         """
 
         self.running = False
-        self.heights = [randint(0,500) for _ in range(100)]
+        self.heights = [randint(0,500) for _ in range(200)]
         self.draw_canvas()
 
 
@@ -159,7 +160,7 @@ class SorterGUI:
 
         self.canvas.delete("all")
         for i, height in enumerate(self.heights):
-            self.canvas.create_rectangle(i*10,500,(i*10)+10,height, fill="white")
+            self.canvas.create_rectangle(i*5,500,(i*5)+5,height, fill="white")
 
         if self.running:
             # If we're muted, synthesizer still does a much better job than
@@ -209,6 +210,7 @@ class SorterGUI:
                     tone_1, tone_2 = next(gen)
                     self.draw_canvas(tone_1, tone_2)
                 except StopIteration:
+                    self.running = False
                     return
             
             # If we make it out of the loop and end up here, the user
@@ -300,6 +302,37 @@ class SorterGUI:
                 nums[j+1] = inserted
 
             yield tone_1, tone_2
+
+
+    def shell_sort(self, nums, sort_order):
+        """
+            Generator for inplace shell sort w/ conditional for sort order
+        """
+        
+        tone_1, tone_2 = 0, 0
+
+        n = len(nums)
+        gap = n // 2
+        while gap > 0:
+            for i in range(gap, n):
+                temp = nums[i]
+                j = i
+                if sort_order == "Ascending":
+                    while j >= gap and nums[j - gap] < temp:
+                        tone_1, tone_2 = nums[j], nums[j-gap]
+                        nums[j] = nums[j - gap]
+                        j -= gap
+                else:
+                    while j >= gap and nums[j - gap] > temp:
+                        tone_1, tone_2 = nums[j], nums[j-gap]
+                        nums[j] = nums[j - gap]
+                        j -= gap
+
+                nums[j] = temp
+                yield tone_1, tone_2
+
+            gap //= 2
+
 
 
 def main():
