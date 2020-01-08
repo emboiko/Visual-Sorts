@@ -26,6 +26,7 @@ class SorterGUI:
 
         self.sort_modes = (
             "Bubble",
+            "Cocktail",
             "Selection",
             "Insertion",
             "Shell",
@@ -334,6 +335,57 @@ class SorterGUI:
             gap //= 2
 
 
+    def cocktail_sort(self, nums, sort_order): 
+        """
+            Generator for inplace cocktail sort w/ conditional for sort order
+
+            Yields twice => Longer / more thorough visualization
+        """
+
+        tone_1, tone_2 = 0, 0
+        
+        n = len(nums) 
+        swapped = True
+        start = 0
+        end = n-1
+        while (swapped == True): 
+            swapped = False
+    
+            for i in range (start, end): 
+                if sort_order == "Ascending":
+                    if (nums[i] < nums[i + 1]) : 
+                        tone_1, tone_2 = nums[i], nums[i + 1]
+                        yield tone_1, tone_2
+                        nums[i], nums[i + 1] = nums[i + 1], nums[i] 
+                        swapped = True
+                else:
+                    if (nums[i] > nums[i + 1]) : 
+                        tone_1, tone_2 = nums[i], nums[i + 1]
+                        yield tone_1, tone_2
+                        nums[i], nums[i + 1] = nums[i + 1], nums[i] 
+                        swapped = True
+            
+            if (swapped == False): 
+                break
+
+            swapped = False    
+            end = end-1
+    
+            for i in range(end-1, start-1, -1): 
+                if sort_order == "Ascending":
+                    if (nums[i] < nums[i + 1]): 
+                        tone_1, tone_2 = nums[i], nums[i + 1]
+                        yield tone_1, tone_2
+                        nums[i], nums[i + 1] = nums[i + 1], nums[i] 
+                        swapped = True
+                else:
+                    if (nums[i] > nums[i + 1]): 
+                        tone_1, tone_2 = nums[i], nums[i + 1]
+                        yield tone_1, tone_2
+                        nums[i], nums[i + 1] = nums[i + 1], nums[i] 
+                        swapped = True
+    
+            start = start + 1
 
 def main():
     """
