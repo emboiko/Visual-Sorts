@@ -69,7 +69,7 @@ class SorterGUI:
             length=200
 
         )
-        self.delay_scale.set(0.085)
+        self.delay_scale.set(0.05)
         
         self.mode_menu = OptionMenu(self.frame, self.sort_mode, *self.sort_modes)
         self.order_menu = OptionMenu(self.frame, self.sort_order, *self.sort_orders)
@@ -226,7 +226,6 @@ class SorterGUI:
                     tone_1, tone_2 = next(gen)
                     self.draw_canvas(tone_1, tone_2)
                 except StopIteration:
-                    print("Done.")
                     self.running = False
                     return
             
@@ -373,16 +372,16 @@ class SorterGUI:
                 if sort_order == "Ascending":
                     if (nums[i] < nums[i + 1]) : 
                         tone_1, tone_2 = nums[i], nums[i + 1]
-                        yield tone_1, tone_2
                         nums[i], nums[i + 1] = nums[i + 1], nums[i] 
                         swapped = True
                 else:
                     if (nums[i] > nums[i + 1]) : 
                         tone_1, tone_2 = nums[i], nums[i + 1]
-                        yield tone_1, tone_2
                         nums[i], nums[i + 1] = nums[i + 1], nums[i] 
                         swapped = True
-            
+
+                yield tone_1, tone_2
+
             if (swapped == False): 
                 break
 
@@ -393,15 +392,15 @@ class SorterGUI:
                 if sort_order == "Ascending":
                     if (nums[i] < nums[i + 1]): 
                         tone_1, tone_2 = nums[i], nums[i + 1]
-                        yield tone_1, tone_2
                         nums[i], nums[i + 1] = nums[i + 1], nums[i] 
                         swapped = True
                 else:
                     if (nums[i] > nums[i + 1]): 
                         tone_1, tone_2 = nums[i], nums[i + 1]
-                        yield tone_1, tone_2
                         nums[i], nums[i + 1] = nums[i + 1], nums[i] 
                         swapped = True
+
+                yield tone_1, tone_2
     
             start = start + 1
 
