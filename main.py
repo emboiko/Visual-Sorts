@@ -11,7 +11,9 @@ from tkinter import (
     BooleanVar
 )
 from random import randint
+
 from synthesizer import Player, Synthesizer, Waveform
+from colour import Color
 
 
 class SorterGUI:
@@ -101,6 +103,11 @@ class SorterGUI:
             osc2_freq_transpose=5.0,
         )
 
+        #Colors:
+        self.color_1 = Color("red")
+        self.color_2 = Color("violet")
+        self.colors = list(self.color_1.range_to(self.color_2, 500))
+
         self.running = False
         self.reset()
         self.master.protocol("WM_DELETE_WINDOW", self.close)
@@ -119,6 +126,7 @@ class SorterGUI:
             Returns an appropriate offset for a given tkinter toplevel,
             such that it always is created center screen on the primary display.
         """
+        #https://github.com/emboiko/Helpers/blob/master/Tk_Tools/get_offset.py
 
         width_offset = int(
             (self.master.winfo_screenwidth() / 2) - (self.master.winfo_width() / 2)
@@ -160,8 +168,12 @@ class SorterGUI:
         """
 
         self.canvas.delete("all")
+
         for i, height in enumerate(self.heights):
-            self.canvas.create_rectangle(i*5,500,(i*5)+5,height, fill="white")
+            self.canvas.create_rectangle(
+                i*5, 500, (i*5)+5, height, 
+                fill=self.colors[height-1]
+            )
 
         if self.running:
             # If we're muted, synthesizer still does a much better job than
@@ -308,6 +320,8 @@ class SorterGUI:
     def shell_sort(self, nums, sort_order):
         """
             Generator for inplace shell sort w/ conditional for sort order
+
+            Yield occurs in a nested loop => longer visualization
         """
         
         tone_1, tone_2 = 0, 0

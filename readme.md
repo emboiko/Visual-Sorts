@@ -1,8 +1,8 @@
 # Sorting w/ Python & Tk.Canvas
 
-![](https://i.imgur.com/zEkXahS.png)
+![](https://i.imgur.com/AbFt8IC.png)
 
-![](https://i.imgur.com/7b3oPQd.png)
+![](https://i.imgur.com/SxbhAcQ.png)
 
 - Inspired by: [15 Sorting Algorithms in 6 Minutes](https://www.youtube.com/watch?v=kPRA0W1kECg).
 - More features coming in the future to further imitate the [video](https://www.youtube.com/watch?v=kPRA0W1kECg).
@@ -17,6 +17,7 @@
 
 - `pyaudio`
 - `synthesizer`
+- `colours`
 
 ##### Usage:
 
@@ -30,7 +31,7 @@
 
 ##### Todo:
 - [ ] Implement many, many sorting algorithms.
-- [ ] Colors
+- [x] Colors
 - [ ] Audio Artifacts
 - [ ] .exe
 
