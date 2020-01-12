@@ -40,7 +40,7 @@ class SorterGUI:
 
         # Widgets:
         self.sort_mode = StringVar(self.master)
-        self.sort_mode.set(self.sort_modes[2])
+        self.sort_mode.set(self.sort_modes[0])
         self.sort_order = StringVar(self.master)
         self.sort_order.set(self.sort_orders[0])
         self.muted = BooleanVar(self.master)
