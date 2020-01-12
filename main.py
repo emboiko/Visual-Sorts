@@ -18,6 +18,7 @@ from colour import Color
 
 class SorterGUI:
     def __init__(self, root):
+        #Tk stuff:
         self.master = root
         self.master.title("Visual Sorts")
         self.master.geometry("1000x550")
@@ -25,12 +26,14 @@ class SorterGUI:
         width_offset, height_offset = self.get_offsets()
         self.master.geometry(f"+{width_offset}+{height_offset}")
         self.master.resizable(False, False)
+        self.master.protocol("WM_DELETE_WINDOW", self.close)
 
         self.sort_modes = (
             "Bubble",
             "Cocktail",
-            "Selection",
+            "Gnome",
             "Insertion",
+            "Selection",
             "Shell",
         )
         self.sort_orders = ("Ascending","Descending")
@@ -108,9 +111,9 @@ class SorterGUI:
         self.color_2 = Color("violet")
         self.colors = list(self.color_1.range_to(self.color_2, 500))
 
+        #Other:
         self.running = False
         self.reset()
-        self.master.protocol("WM_DELETE_WINDOW", self.close)
 
 
     def __str__(self):
@@ -223,6 +226,7 @@ class SorterGUI:
                     tone_1, tone_2 = next(gen)
                     self.draw_canvas(tone_1, tone_2)
                 except StopIteration:
+                    print("Done.")
                     self.running = False
                     return
             
@@ -400,6 +404,32 @@ class SorterGUI:
                         swapped = True
     
             start = start + 1
+
+
+    def gnome_sort(self, nums, sort_order=None): 
+        """
+            Generator for inplace gnome sort w/ conditional for sort order
+        """
+
+        index = 0
+        while index < len(nums): 
+            if index == 0: 
+                index = index + 1
+            if sort_order == "Ascending":    
+                if nums[index] <= nums[index - 1]: 
+                    index = index + 1
+                else: 
+                    nums[index], nums[index-1] = nums[index-1], nums[index] 
+                    yield nums[index], nums[index-1]
+                    index = index - 1
+            else:
+                if nums[index] >= nums[index - 1]: 
+                    index = index + 1
+                else: 
+                    nums[index], nums[index-1] = nums[index-1], nums[index] 
+                    yield nums[index], nums[index-1]
+                    index = index - 1
+
 
 def main():
     """
