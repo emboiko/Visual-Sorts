@@ -12,12 +12,13 @@
 - *(Probably create a virtual environment)*
 - Find the wheel appropriate wheel for pyaudio [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio).
 - `pip install wheel.whl`
+- `pip install requirements.txt`
 
 ##### Dependencies:
 
 - `pyaudio`
 - `synthesizer`
-- `colours`
+- `colour`
 
 ##### Usage:
 
@@ -33,11 +34,4 @@
 - [ ] Implement many, many sorting algorithms.
 - [x] Colors
 - [ ] Audio Artifacts
-- [ ] .exe
-
----
-###### 1/5/2020:
-
-- Implemented beeps & boops
-
-- .exe removed temporarily while I try to make PyInstaller play nice with enum34, a package that pyaudio uses
+- [ ] Compile Executable
