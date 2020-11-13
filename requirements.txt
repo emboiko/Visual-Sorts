@@ -1,3 +1,4 @@
+numpy==1.19.3 # see https://developercommunity.visualstudio.com/content/problem/1207405/fmod-after-an-update-to-windows-2004-is-causing-a.html
 synthesizer
 colour
-PyAudio
+enum-compat

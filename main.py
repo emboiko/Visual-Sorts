@@ -129,7 +129,6 @@ class SorterGUI:
             Returns an appropriate offset for a given tkinter toplevel,
             such that it always is created center screen on the primary display.
         """
-        #https://github.com/emboiko/Helpers/blob/master/Tk_Tools/get_offset.py
 
         width_offset = int(
             (self.master.winfo_screenwidth() / 2) - (self.master.winfo_width() / 2)
@@ -438,7 +437,7 @@ def main():
     """
 
     root = Tk()
-    sorter_gui = SorterGUI(root)
+    SorterGUI(root)
     root.mainloop()
 
 

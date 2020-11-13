@@ -16,22 +16,23 @@
 
 ##### Dependencies:
 
-- `pyaudio`
-- `synthesizer`
+- `synthesizer` 
 - `colour`
+- `PyAudio`
+- `enum-compat` (if you plan to compile it with PyInstaller)
 
 ##### Usage:
 
 `python main.py`
 
-~~or~~
+or
 
-~~`Visual-Sorts.exe`~~
+`Visual-Sorts.exe`
 
 ---
 
 ##### Todo:
 - [ ] Implement many, many sorting algorithms.
 - [x] Colors
-- [ ] Audio Artifacts
-- [ ] Compile Executable
+- [ ] Audio artifacts / clipping
+- [x] Compile Executable (https://stackoverflow.com/questions/43124775/why-python-3-6-1-throws-attributeerror-module-enum-has-no-attribute-intflag) 
