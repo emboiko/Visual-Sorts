@@ -16,7 +16,8 @@
 
 ##### Dependencies:
 
-- `synthesizer` 
+- `numpy==1.19.3`
+- `synthesizer`
 - `colour`
 - `PyAudio`
 - `enum-compat` (if you plan to compile it with PyInstaller)
